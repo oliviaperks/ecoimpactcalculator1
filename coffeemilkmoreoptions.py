@@ -71,13 +71,13 @@ def show_calculator_page():
     tips_frame.pack_forget()
     calculator_frame.pack(fill="both", expand=True)
 
-# --- MAIN WINDOW ---
+# MAIN WINDOW 
 root = tk.Tk()
 root.title("🌍 Daily Habits Environmental Impact Calculator 🌿")
 root.geometry("750x800")
 root.configure(bg="#E9F5E1")
 
-# --- PAGE 1: CALCULATOR ---
+# PAGE 1: CALCULATOR 
 calculator_frame = tk.Frame(root, bg="#E9F5E1")
 calculator_frame.pack(fill="both", expand=True)
 
@@ -156,7 +156,7 @@ footer = tk.Label(
 )
 footer.pack(fill="x")
 
-# --- PAGE 2: TIPS PAGE ---
+# PAGE 2: TIPS PAGE
 tips_frame = tk.Frame(root, bg="#E9F5E1")
 
 tips_title = tk.Label(
