@@ -1,148 +1,214 @@
-def main():
-    print("🌍 Daily Habits Environmental Impact Calculator 🌍\n")
+import tkinter as tk
+from tkinter import ttk, messagebox
 
-    # Ask for daily habits
-    coffees = int(input("How many coffees do you drink per day? "))
-    km_driven = float(input("How many kilometres do you drive per day? "))
-    meat_meals = int(input("How many meat-based meals do you eat per day? "))
-    fast_fashion = int(input("How many fast fashion items do you buy per month? (approx) "))
-    shower_minutes = int(input("How many minutes do you usually shower? "))
+# Environmental data
+milk_data = {
+    "almond": {"water": 371, "co2": 0.14},
+    "oat": {"water": 48, "co2": 0.18},
+    "soy": {"water": 28, "co2": 0.09},
+    "cow": {"water": 628, "co2": 3.2}
+}
 
-    # Ask about milk choice
-    print("\nWhat type of milk do you usually drink in your coffee?")
-    print("Options: almond, oat, soy, cow")
-    milk_choice = input("Enter your choice: ").lower()
+# Functions to calculate impacts 
+def calculate_impact():
+    try:
+        coffees = int(entry_coffee.get())
+        km_driven = float(entry_km.get())
+        meat_meals = int(entry_meat.get())
+        fast_fashion = int(entry_fashion.get())
+        shower_minutes = int(entry_shower.get())
+        milk_choice = milk_var.get().lower()
 
-    # Environmental data (average estimates per litre of milk)
-    milk_data = {
-        "almond": {"water": 371, "co2": 0.14},
-        "oat": {"water": 48, "co2": 0.18},
-        "soy": {"water": 28, "co2": 0.09},
-        "cow": {"water": 628, "co2": 3.2}
-    }
+        # Simplified daily activity impacts
+        coffee_base_water = coffees * 130
+        car_emissions = km_driven * 0.21
+        meat_emissions = meat_meals * 2.5
+        fast_fashion_water = fast_fashion * 2700 / 30
+        shower_water = shower_minutes * 9
 
-    # Simplified daily activity impacts
-    coffee_base_water = coffees * 130  # litres of water per coffee (farm to cup)
-    car_emissions = km_driven * 0.21  # kg CO2 per km (average petrol car)
-    meat_emissions = meat_meals * 2.5  # kg CO2 per meal
-    fast_fashion_water = fast_fashion * 2700 / 30  # litres/day
-    shower_water = shower_minutes * 9  # litres per minute of shower
+        # Milk impact
+        milk_per_coffee = 0.2
+        if milk_choice in milk_data:
+            milk_water = milk_data[milk_choice]["water"] * milk_per_coffee * coffees
+            milk_emissions = milk_data[milk_choice]["co2"] * milk_per_coffee * coffees
+        else:
+            milk_water = milk_emissions = 0
 
-    # Calculate milk impact per coffee (assuming 0.2L milk per coffee)
-    milk_per_coffee = 0.2
+        total_coffee_water = coffee_base_water + milk_water
+        total_water = total_coffee_water + fast_fashion_water + shower_water
+        total_emissions = car_emissions + meat_emissions + milk_emissions
 
-    if milk_choice in milk_data:
-        milk_water = milk_data[milk_choice]["water"] * milk_per_coffee * coffees
-        milk_emissions = milk_data[milk_choice]["co2"] * milk_per_coffee * coffees
-    else:
-        milk_choice = "unknown"
-        milk_water = 0
-        milk_emissions = 0
-        print("\n⚠️ Invalid milk choice. Defaulting to 0 impact for milk.")
+        result_text = f"""
+🌱 Estimated Daily Environmental Impact 🌱
 
-    # Add milk impact to total coffee footprint
-    total_coffee_water = coffee_base_water + milk_water
+☕ Coffee ({coffees} cups with {milk_choice} milk)
+   → {total_coffee_water:.0f} L water
+   → {milk_emissions:.2f} kg CO₂
 
-    # Display estimated daily impact
-    print("\n--- 🌱 Estimated Daily Environmental Impact ---")
-    print(f"☕ Coffee ({coffees} cups with {milk_choice} milk):")
-    print(f"   → ~{total_coffee_water:.0f} litres of water")
-    print(f"   → ~{milk_emissions:.2f} kg CO₂ from milk")
+🚗 Driving: {km_driven} km → {car_emissions:.2f} kg CO₂
+🥩 Meat meals: {meat_meals} → {meat_emissions:.2f} kg CO₂
+👕 Fast fashion: {fast_fashion}/month → {fast_fashion_water:.0f} L water/day
+🚿 Showers: {shower_minutes} min → {shower_water:.0f} L water
 
-    print(f"🚗 Driving: {km_driven} km → ~{car_emissions:.2f} kg CO₂")
-    print(f"🥩 Meat meals: {meat_meals} → ~{meat_emissions:.2f} kg CO₂")
-    print(f"👕 Fast fashion: {fast_fashion} items/month → ~{fast_fashion_water:.0f} litres water/day")
-    print(f"🚿 Showers: {shower_minutes} minutes → ~{shower_water:.0f} litres of water")
+💧 Total water use: {total_water:.0f} L/day
+💨 Total CO₂ emissions: {total_emissions:.2f} kg/day
 
-    # Milk comparison table
-    print("\n🥛 Milk Environmental Impact (per litre):")
-    print("{:<10} {:<20} {:<15}".format("Milk Type", "Water Use (L)", "CO₂ (kg)"))
-    print("-" * 40)
-    for milk, data in milk_data.items():
-        print("{:<10} {:<20} {:<15}".format(milk.capitalize(), data["water"], data["co2"]))
+Small choices, big impact 🌏
+"""
+        result_box.config(state="normal")
+        result_box.delete("1.0", tk.END)
+        result_box.insert(tk.END, result_text)
+        result_box.config(state="disabled")
 
-    # Detailed environmental review
-    print("\n🌿 Environmental Impact Overview by Milk Type\n")
+    except ValueError:
+        messagebox.showerror("Input Error", "Please enter valid numeric values for all fields.")
 
-    print("🐄 Cow’s Milk:")
-    print("Negatives:")
-    print("- Methane from enteric fermentation (cow digestion) contributes significantly to greenhouse gases.")
-    print("- Manure releases methane and nitrous oxide, both powerful greenhouse gases.")
-    print("- Requires large amounts of land and water for grazing and feed production.")
-    print("- Manure and fertiliser runoff can pollute waterways, causing algal blooms and ecosystem harm.")
-    print("Advantages:")
-    print("- Technological improvements have reduced land use by 90%, feed by 77%, and water by 65% per glass since the 1950s.")
-    print("- Innovations like SeaFeed™ (seaweed-based feed) can reduce methane emissions from cattle.")
-    print("- Cow’s milk remains a key source of protein, calcium, and essential nutrients.")
+def show_tips_page():
+    calculator_frame.pack_forget()
+    tips_frame.pack(fill="both", expand=True)
 
-    print("\n🌱 Soy Milk:")
-    print("Negatives:")
-    print("- Large-scale soy farming can contribute to deforestation, especially in the Amazon.")
-    print("- Intensive farming may reduce biodiversity and degrade soil due to pesticides and fertilisers.")
-    print("Advantages:")
-    print("- Requires 95% less land and water than dairy milk.")
-    print("- Produces significantly lower greenhouse gas emissions.")
-    print("- Soy crops can improve soil fertility through nitrogen fixation.")
+def show_calculator_page():
+    tips_frame.pack_forget()
+    calculator_frame.pack(fill="both", expand=True)
 
-    print("\n🌳 Almond Milk:")
-    print("Negatives:")
-    print("- Almond trees are water-intensive, with most production in drought-prone California.")
-    print("Advantages:")
-    print("- Very low greenhouse gas emissions.")
-    print("- Almond trees absorb CO₂, helping offset some emissions.")
-    print("- Requires much less land than dairy milk.")
+# --- MAIN WINDOW ---
+root = tk.Tk()
+root.title("🌍 Daily Habits Environmental Impact Calculator 🌿")
+root.geometry("750x800")
+root.configure(bg="#E9F5E1")
 
-    print("\n🌾 Oat Milk:")
-    print("Negatives:")
-    print("- Some conventional oat farms use pesticides like glyphosate, which can impact soil health.")
-    print("Advantages:")
-    print("- Produces considerably fewer greenhouse gas emissions than dairy milk.")
-    print("- Requires significantly less water than dairy or almond milk.")
-    print("- Often sourced from regions with lower environmental strain, such as Northern Europe.")
+# --- PAGE 1: CALCULATOR ---
+calculator_frame = tk.Frame(root, bg="#E9F5E1")
+calculator_frame.pack(fill="both", expand=True)
 
-    # Statistics and insights
-    print("\n📊 Quick Facts:")
-    print("- Cow’s milk emits over 3 kg CO₂ per litre — roughly 35x higher than soy milk.")
-    print("- Almond milk uses about 13x more water than soy milk.")
-    print("- Switching from cow’s to oat milk for 2 coffees/day can save ~200 L of water per week.")
-    print("- Cutting one meat meal per day reduces CO₂ by ~900 kg/year — equivalent to 3,600 km less driving.")
+title = tk.Label(
+    calculator_frame,
+    text="🌿 Daily Habits Environmental Impact Calculator 🌿",
+    font=("Helvetica", 18, "bold"),
+    bg="#A8D5BA",
+    fg="#1E392A",
+    pady=15
+)
+title.pack(fill="x")
 
-    # Total summary
-    total_water = total_coffee_water + fast_fashion_water + shower_water
-    total_emissions = car_emissions + meat_emissions + milk_emissions
+input_frame = tk.Frame(calculator_frame, bg="#E9F5E1")
+input_frame.pack(pady=20)
 
-    print("\n--- 🌏 Total Daily Summary ---")
-    print(f"💧 Total water use: ~{total_water:.0f} litres/day")
-    print(f"💨 Total CO₂ emissions: ~{total_emissions:.2f} kg/day")
+def create_label_entry(parent, text, row):
+    label = tk.Label(parent, text=text, bg="#E9F5E1", fg="#2E4D2C", font=("Helvetica", 12, "bold"))
+    entry = tk.Entry(parent, font=("Helvetica", 12), width=10)
+    label.grid(row=row, column=0, sticky="w", pady=5, padx=10)
+    entry.grid(row=row, column=1, pady=5)
+    return entry
 
-    print("\nRemember: Small daily choices add up to big impacts! 🌱")
-    print("""💪 Ways You Can Make a Difference  
+entry_coffee = create_label_entry(input_frame, "How many coffees per day?", 0)
+entry_km = create_label_entry(input_frame, "Kilometres driven per day?", 1)
+entry_meat = create_label_entry(input_frame, "Meat-based meals per day?", 2)
+entry_fashion = create_label_entry(input_frame, "Fast fashion items per month?", 3)
+entry_shower = create_label_entry(input_frame, "Minutes showering?", 4)
 
-Your daily choices matter — even small changes can reduce your environmental footprint and inspire others to do the same.  
+# Milk dropdown
+tk.Label(input_frame, text="Type of milk used?", bg="#E9F5E1", fg="#2E4D2C", font=("Helvetica", 12, "bold")).grid(row=5, column=0, pady=10, sticky="w", padx=10)
+milk_var = tk.StringVar(value="oat")
+milk_menu = ttk.Combobox(input_frame, textvariable=milk_var, values=["almond", "oat", "soy", "cow"], font=("Helvetica", 12))
+milk_menu.grid(row=5, column=1, pady=10)
 
-☕ Coffee  
-- Bring a reusable cup instead of disposable ones.  
-- Choose plant-based milk or support local cafés that prioritise sustainable sourcing.  
+# Calculate button
+calculate_btn = tk.Button(
+    calculator_frame,
+    text="Calculate My Impact 🌎",
+    font=("Helvetica", 14, "bold"),
+    bg="#6DBE77",
+    fg="white",
+    activebackground="#57A76B",
+    padx=20,
+    pady=10,
+    relief="flat",
+    command=calculate_impact
+)
+calculate_btn.pack(pady=10)
 
-🚗 Transport  
-- Walk, cycle, or use public transport for short trips.  
-- Carpool with friends or co-workers.  
-- Combine errands to reduce kilometres.  
+# Result box
+result_box = tk.Text(calculator_frame, height=15, width=75, font=("Helvetica", 12), wrap="word", bg="#F4FBF3", fg="#1E392A")
+result_box.pack(padx=20, pady=10)
+result_box.config(state="disabled")
 
-🍔 Food Choices  
-- Swap one or two meat meals each week for plant-based options.  
-- Buy local, seasonal produce.  
-- Reduce food waste by planning meals and using leftovers.  
+# Tips button
+tips_btn = tk.Button(
+    calculator_frame,
+    text="💪 Learn How to Make a Difference",
+    font=("Helvetica", 13, "bold"),
+    bg="#A8D5BA",
+    fg="#1E392A",
+    relief="flat",
+    command=show_tips_page
+)
+tips_btn.pack(pady=10)
 
-👗 Fashion  
-- Buy second-hand or from ethical brands.  
-- Avoid fast fashion and host clothing swaps.  
+# Footer
+footer = tk.Label(
+    calculator_frame,
+    text="🌎 Small changes make a big difference • Live consciously • Choose sustainably 🌎",
+    font=("Helvetica", 10, "italic"),
+    bg="#E9F5E1",
+    fg="#3B5930",
+    pady=10
+)
+footer.pack(fill="x")
 
-🚿 Water & Energy  
-- Keep showers under 5 minutes.  
-- Turn off taps when brushing teeth or washing dishes.  
-- Use cold laundry cycles and air-dry clothes.  
-""")
+# --- PAGE 2: TIPS PAGE ---
+tips_frame = tk.Frame(root, bg="#E9F5E1")
 
-if __name__ == "__main__":
-    main()
+tips_title = tk.Label(
+    tips_frame,
+    text="💪 Ways You Can Make a Difference 💚",
+    font=("Helvetica", 18, "bold"),
+    bg="#A8D5BA",
+    fg="#1E392A",
+    pady=15
+)
+tips_title.pack(fill="x")
+
+tips_text = """Your daily choices matter — even small changes can reduce your environmental footprint and inspire others to do the same.
+
+☕ Coffee
+- Bring a reusable cup instead of disposable ones.
+- Choose plant-based milk or support local cafés that prioritise sustainable sourcing.
+
+🚗 Transport
+- Walk, cycle, or use public transport for short trips.
+- Carpool with friends or co-workers.
+- Combine errands to reduce kilometres.
+
+🍔 Food Choices
+- Swap one or two meat meals each week for plant-based options.
+- Buy local, seasonal produce.
+- Reduce food waste by planning meals and using leftovers.
+
+👗 Fashion
+- Buy second-hand or from ethical brands.
+- Avoid fast fashion and host clothing swaps.
+
+🚿 Water & Energy
+- Keep showers under 5 minutes.
+- Turn off taps when brushing teeth or washing dishes.
+- Use cold laundry cycles and air-dry clothes.
+"""
+
+tips_box = tk.Text(tips_frame, height=30, width=80, font=("Helvetica", 12), wrap="word", bg="#F4FBF3", fg="#1E392A")
+tips_box.pack(padx=20, pady=20)
+tips_box.insert(tk.END, tips_text)
+tips_box.config(state="disabled")
+
+back_btn = tk.Button(
+    tips_frame,
+    text="⬅️ Back to Calculator",
+    font=("Helvetica", 13, "bold"),
+    bg="#A8D5BA",
+    fg="#1E392A",
+    relief="flat",
+    command=show_calculator_page
+)
+back_btn.pack(pady=10)
+
+root.mainloop()
