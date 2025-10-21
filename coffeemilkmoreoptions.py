@@ -156,7 +156,7 @@ footer = tk.Label(
 )
 footer.pack(fill="x")
 
-# PAGE 2: TIPS PAGE
+# PAGE 2: TIPS PAGE 
 tips_frame = tk.Frame(root, bg="#E9F5E1")
 
 tips_title = tk.Label(
