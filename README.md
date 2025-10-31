@@ -1,6 +1,6 @@
 # 🌿 Daily Habits Environmental Impact Calculator
 
-A Python-based Tkinter app that estimates your daily environmental impact, including water use and CO₂ emissions, based on everyday activities such as coffee consumption, driving, and showering. Designed to promote awareness through simple interaction and positive behaviour change.
+A Python based Tkinter app that estimates your daily environmental impact, including water use and CO₂ emissions, based on everyday activities such as coffee consumption, driving, and showering. Designed to promote awareness through simple interaction and positive behaviour change.
 
 ---
 
@@ -10,10 +10,6 @@ A Python-based Tkinter app that estimates your daily environmental impact, inclu
 - [Technologies](#technologies)
 - [Setup](#setup)
 - [How It Works](#how-it-works)
-- [Screenshots](#screenshots)
-- [Sources](#sources)
-- [Future Improvements](#future-improvements)
-- [Author](#author)
 
 ---
 
@@ -51,10 +47,16 @@ Project built using:
 ---
 
 ## ⚙️ Setup
-To run the project locally:
+What you’ll need:
+
+- Python 3 installed
+
+-  VS Code Installed
+
+ To run the project locally:
 
 Clone this repository
-git clone https://github.com/yourusername/ecoimpactcalculator.git
+git clone 
 
 Move into project directory
 cd ecoimpactcalculator
