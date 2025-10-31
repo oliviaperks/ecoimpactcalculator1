@@ -14,7 +14,6 @@ A Python based Tkinter app that estimates your daily environmental impact, inclu
 ---
 
 ## 🌎 General Info
-This project was created as part of my university coursework to explore how small daily decisions add up to a measurable environmental impact.  
 
 The program lets users input:
 - Coffees per day  
