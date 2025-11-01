@@ -29,8 +29,8 @@ It then calculates estimated **water usage** and **CO₂ emissions**, showing us
 
 ## ✨ Features
 - Interactive Tkinter GUI built in Python  
-- Multi-page layout for better user experience (navigation between “Input” and “Tips” pages)  
-- Real-time calculation of environmental impact  
+- Multi page layout for better user experience (navigation between “Input” and “Tips” pages)  
+- Calculation of environmental impact  
 - Educational tips encouraging positive habits  
 - Clear, friendly interface suitable for beginners  
 
@@ -38,10 +38,10 @@ It then calculates estimated **water usage** and **CO₂ emissions**, showing us
 
 ## 💻 Technologies
 Project built using:
-- **Python 3.12**
-- **Tkinter** for GUI design
-- **Custom dictionaries** for data storage (milk types, emissions, etc.)
-- **Statistical data** from environmental reports (Statista, Swissmilk, MLA, etc.)
+- Python 3.12**
+- Tkinter** for GUI design
+- custom dictionaries** for data storage (milk types, emissions, etc.)
+- Statistical data** from environmental reports (Statista, Swissmilk, MLA, etc.)
 
 ---
 
@@ -75,7 +75,7 @@ Driving emissions = km × 0.21 kg CO₂
 
 Shower water = minutes × 9 L
 
-Milk type uses specific per-litre data from Statista (2023) and Swissmilk (Geburt et al., 2022).
+Milk type uses specific per litre data from Statista (2023) and Swissmilk (Geburt et al., 2022).
 
 Output: Results are displayed in a readable summary box.
 
